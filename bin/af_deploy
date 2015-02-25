@@ -89,6 +89,11 @@ if [ $AF_DEPLOY = 1 ]; then
     print_info "Configuring AppFirst package"
     sed -i "/Tenant/c\   Tenant $TID" $HOME/.appfirst/etc/AppFirst.conf
     cp $HOME/.appfirst/etc/AppFirst.conf $HOME/.appfirst/etc/AppFirst
+
+    if [ ! -e $HOME/.appfirst/usr/share/appfirst/AppFirst ]; then
+        ln -s $HOME/.appfirst/etc/AppFirst $HOME/.appfirst/usr/share/appfirst/AppFirst
+    fi
+
     export LD_LIBRARY_PATH="$HOME/.appfirst/usr/share/appfirst:$LD_LIBRARY_PATH"
     export LD_PRELOAD="$HOME/.appfirst/usr/share/appfirst/libwrap.so.1.0.1"
     $HOME/.appfirst/usr/bin/collector --piddir="$HOME/.appfirst/var" --datadir="$HOME/.appfirst/opt/data"
@@ -99,6 +104,9 @@ else
     echo "#!/bin/bash" > $STARTUP_SCRIPT
     echo "sed -i \"/Tenant/c\   Tenant \$1\" \$HOME/.appfirst/etc/AppFirst.conf" >> $STARTUP_SCRIPT
     echo "cp \$HOME/.appfirst/etc/AppFirst.conf \$HOME/.appfirst/etc/AppFirst" >> $STARTUP_SCRIPT
+    echo "if [ ! -e \$HOME/.appfirst/usr/share/appfirst/AppFirst ]; then" >> $STARTUP_SCRIPT
+    echo "ln -s \$HOME/.appfirst/etc/AppFirst \$HOME/.appfirst/usr/share/appfirst/AppFirst" >> $STARTUP_SCRIPT
+    echo "fi"  >> $STARTUP_SCRIPT
     echo "\$HOME/.appfirst/usr/bin/collector --piddir=\"\$HOME/.appfirst/var\" --datadir=\"\$HOME/.appfirst/opt/data\" -d 1 2> /dev/null" >> $STARTUP_SCRIPT
     chmod 0777 $STARTUP_SCRIPT
 fi
@@ -110,6 +118,11 @@ PROFILE_D_SCRIPT=$BUILD_DIR/.profile.d/appfirst.sh
 echo "#!/bin/bash" > $PROFILE_D_SCRIPT
 echo "export LD_LIBRARY_PATH=\"\$HOME/.appfirst/usr/share/appfirst:\$LD_LIBRARY_PATH\"" >> $PROFILE_D_SCRIPT
 echo "export LD_PRELOAD=\"\$HOME/.appfirst/usr/share/appfirst/libwrap.so.1.0.1\"" >> $PROFILE_D_SCRIPT
+echo "if [ ! -e \$HOME/.appfirst/usr/share/appfirst/AppFirst ]; then" >> $PROFILE_D_SCRIPT
+echo "ln -s \$HOME/.appfirst/etc/AppFirst \$HOME/.appfirst/usr/share/appfirst/AppFirst" >> $PROFILE_D_SCRIPT
+echo "fi"  >> $PROFILE_D_SCRIPT
+
+cat $PROFILE_D_SCRIPT
 
 if [ $AF_DEPLOY = 1 ]; then
     echo "\$HOME/.appfirst/usr/bin/collector --piddir=\"\$HOME/.appfirst/var\" --datadir=\"\$HOME/.appfirst/opt/data\"" >> $PROFILE_D_SCRIPT
