@@ -67,7 +67,7 @@ else
 fi
 
 #PACKAGE="http://wwws.appfirst.com/packages/updates/distrodeb/distrodeb$ARCH.$PKG_EXT"
-PACKAGE="https://www.dropbox.com/s/83oxhg14thgiwu7/distrodeb64.deb"
+PACKAGE="http://wwws.appfirst.com/packages/updates/warden64.deb"
 
 PACKAGE_NAME=$(basename $PACKAGE .$PKG_EXT)
 PACKAGE_FILE=$INSTALL_DIR/$PACKAGE_NAME.$PKG_EXT
@@ -97,25 +97,25 @@ STARTUP_SCRIPT=$BUILD_DIR/startup.sh
 
 echo "#!/bin/bash" > $STARTUP_SCRIPT
 echo "sed -i \"/Tenant/c\   Tenant \$1\" \$HOME/.profile.d/.appfirst/etc/AppFirst.conf" >> $STARTUP_SCRIPT
+echo "sed -i \"/NagiosConfig/c\   NagiosConfig \$HOME/.profile.d/.appfirst/usr/share/appfirst/plugins/etc/nrpe_appfirst.cfg\" \$HOME/.profile.d/.appfirst/etc/AppFirst.conf" >> $STARTUP_SCRIPT
 echo "cp \$HOME/.profile.d/.appfirst/etc/AppFirst.conf \$HOME/.profile.d/.appfirst/etc/AppFirst" >> $STARTUP_SCRIPT
 echo "if [ ! -e \$HOME/.profile.d/.appfirst/usr/share/appfirst/AppFirst ]; then" >> $STARTUP_SCRIPT
 echo "ln -s \$HOME/.profile.d/.appfirst/etc/AppFirst \$HOME/.profile.d/.appfirst/usr/share/appfirst/AppFirst" >> $STARTUP_SCRIPT
 echo "fi" >> $STARTUP_SCRIPT
 echo "pkill -9 collector" >> $STARTUP_SCRIPT
-echo "\$HOME/.profile.d/.appfirst/usr/bin/collector --piddir=\"\$HOME/.profile.d/.appfirst/var\" --datadir=\"\$HOME/.profile.d/.appfirst/opt/data\" -d 1 2> /dev/null" >> $STARTUP_SCRIPT
+echo "\$HOME/.profile.d/.appfirst/usr/bin/collector --logdir=\"\$HOME/.profile.d/.appfirst/usr/share/appfirst/\" --libdir=\"\$HOME/.profile.d/.appfirst/usr/share/appfirst/\" --piddir=\"\$HOME/.profile.d/.appfirst/var\" --datadir=\"\$HOME/.profile.d/.appfirst/opt/data\" -r -d 1 2> /dev/null" >> $STARTUP_SCRIPT
 chmod 0777 $STARTUP_SCRIPT
 
 print_info "Building runtime environment"
 
-#mkdir -p $BUILD_DIR/.profile.d
 PROFILE_D_SCRIPT=$BUILD_DIR/.profile.d/appfirst.sh
 echo "#!/bin/bash" > $PROFILE_D_SCRIPT
-#echo "sed -i \"/Tenant/c\   Tenant 11476\" \$HOME/.profile.d/.appfirst/etc/AppFirst.conf" >> $PROFILE_D_SCRIPT
+echo "sed -i \"/NagiosConfig/c\   NagiosConfig \$HOME/.profile.d/.appfirst/usr/share/appfirst/plugins/etc/nrpe_appfirst.cfg\" \$HOME/.profile.d/.appfirst/etc/AppFirst.conf" >> $PROFILE_D_SCRIPT
 echo "cp \$HOME/.profile.d/.appfirst/etc/AppFirst.conf \$HOME/.profile.d/.appfirst/etc/AppFirst" >> $PROFILE_D_SCRIPT
 echo "export LD_LIBRARY_PATH=\"\$HOME/.profile.d/.appfirst/usr/share/appfirst:\$LD_LIBRARY_PATH\"" >> $PROFILE_D_SCRIPT
 echo "export LD_PRELOAD=\"\$HOME/.profile.d/.appfirst/usr/share/appfirst/libwrap.so.1.0.1\"" >> $PROFILE_D_SCRIPT
 echo "if [ ! -e \$HOME/.profile.d/.appfirst/usr/share/appfirst/AppFirst ]; then" >> $PROFILE_D_SCRIPT
 echo "ln -s \$HOME/.profile.d/.appfirst/etc/AppFirst \$HOME/.profile.d/.appfirst/usr/share/appfirst/AppFirst" >> $PROFILE_D_SCRIPT
 echo "fi"  >> $PROFILE_D_SCRIPT
-echo "\$HOME/.profile.d/.appfirst/usr/bin/collector --piddir=\"\$HOME/.profile.d/.appfirst/var\" --datadir=\"\$HOME/.profile.d/.appfirst/opt/data\"" >> $PROFILE_D_SCRIPT
+echo "\$HOME/.profile.d/.appfirst/usr/bin/collector --logdir=\"\$HOME/.profile.d/.appfirst/usr/share/appfirst/\" --libdir=\"\$HOME/.profile.d/.appfirst/usr/share/appfirst/\" --piddir=\"\$HOME/.profile.d/.appfirst/var\" --datadir=\"\$HOME/.profile.d/.appfirst/opt/data\" -r" >> $PROFILE_D_SCRIPT
 chmod 0777 $PROFILE_D_SCRIPT
