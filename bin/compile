@@ -60,11 +60,11 @@ if [ $ARCH = "i686" ]; then
     ARCH="i386"
 fi
 
-if [ $ARCH = "i386" ]; then
-    ARCH="32"
-else
-    ARCH="64"
-fi
+#if [ $ARCH = "i386" ]; then
+#    ARCH="32"
+#else
+#    ARCH="64"
+#fi
 
 PACKAGE="http://wwws.appfirst.com/packages/updates/distrodeb/appfirst-latest-$ARCH.$PKG_EXT"
 #PACKAGE="http://wwws.appfirst.com/packages/updates/warden64.deb"
