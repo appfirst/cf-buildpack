@@ -66,7 +66,7 @@ fi
 #    ARCH="64"
 #fi
 
-PACKAGE="http://wwws.appfirst.com/packages/updates/distrodeb/appfirst-latest-$ARCH.$PKG_EXT"
+PACKAGE="http://wwws.appfirst.com/packages/updates/appfirst-latest-$ARCH.$PKG_EXT"
 #PACKAGE="http://wwws.appfirst.com/packages/updates/warden64.deb"
 
 PACKAGE_NAME=$(basename $PACKAGE .$PKG_EXT)
