@@ -94,10 +94,10 @@ if [ -f "$BUILD_DIR/feurl.conf" ]; then
   FEURL=`cat $BUILD_DIR/feurl.conf`
   rm -rf $BUILD_DIR/feurl.conf
 else
-  FEURL=wwws.appfirst.com  
+  FEURL=pod2-frontend.appfirst.com
 fi
   
-test -z $TID && { echo Missing tid.conf; exit 1 }; 
+test -z $TID && { print_info "Missing tid.conf"; exit 1; } 
 
 print_info "TID = $TID"
 print_info "FEURL = $FEURL"
