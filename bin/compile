@@ -92,6 +92,13 @@ if [ -f "$BUILD_DIR/tid.conf" ]; then
   rm -rf $BUILD_DIR/tid.conf
 fi
 
+if [ -f "$BUILD_DIR/feurl.conf" ]; then
+  FEURL=`cat $BUILD_DIR/feurl.conf`
+  print_info "FEURL = $FEURL"
+  sed -i "/URLfront/c\   URLfront $FEURL" $INSTALL_DIR/etc/AppFirst.conf
+  rm -rf $BUILD_DIR/feurl.conf
+fi
+
 print_info "Building startup script"
 STARTUP_SCRIPT=$BUILD_DIR/startup.sh
 
