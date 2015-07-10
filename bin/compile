@@ -87,17 +87,27 @@ rm -rf $PACKAGE_FILE
 
 if [ -f "$BUILD_DIR/tid.conf" ]; then
   TID=`cat $BUILD_DIR/tid.conf`
-  print_info "TID = $TID"
-  sed -i "/Tenant/c\   Tenant $TID" $INSTALL_DIR/etc/AppFirst.conf
   rm -rf $BUILD_DIR/tid.conf
 fi
 
 if [ -f "$BUILD_DIR/feurl.conf" ]; then
   FEURL=`cat $BUILD_DIR/feurl.conf`
-  print_info "FEURL = $FEURL"
-  sed -i "/URLfront/c\   URLfront $FEURL" $INSTALL_DIR/etc/AppFirst.conf
   rm -rf $BUILD_DIR/feurl.conf
+else
+  FEURL=wwws.appfirst.com  
 fi
+  
+test -z $TID && { echo Missing tid.conf; exit 1 }; 
+
+print_info "TID = $TID"
+print_info "FEURL = $FEURL"
+
+echo "
+<configuration>
+    Tenant   $TID  
+    URLfront $FEURL
+</configuration>
+" > $INSTALL_DIR/etc/AppFirst.conf
 
 print_info "Building startup script"
 STARTUP_SCRIPT=$BUILD_DIR/startup.sh
